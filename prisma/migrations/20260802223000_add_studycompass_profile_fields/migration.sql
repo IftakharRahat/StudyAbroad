@@ -1,0 +1,13 @@
+ALTER TABLE "StudentProfile" ADD COLUMN "bachelorDegreeName" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "universityName" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "departmentMajor" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "graduationYear" INTEGER;
+ALTER TABLE "StudentProfile" ADD COLUMN "duolingoScore" DOUBLE PRECISION;
+ALTER TABLE "StudentProfile" ADD COLUMN "preferredIntake" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "researchInterest" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "hasWorkExperience" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "StudentProfile" ADD COLUMN "recentJobTitle" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "industryField" TEXT;
+ALTER TABLE "StudentProfile" ADD COLUMN "preferredTuitionMinUsd" DOUBLE PRECISION;
+ALTER TABLE "StudentProfile" ADD COLUMN "preferredTuitionMaxUsd" DOUBLE PRECISION;
+ALTER TABLE "StudentProfile" ADD COLUMN "needsScholarship" BOOLEAN NOT NULL DEFAULT true;

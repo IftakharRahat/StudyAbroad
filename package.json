@@ -1,0 +1,28 @@
+{
+  "name": "study-abroad-platform",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build --workspace @study-abroad/shared && concurrently \"npm run dev --workspace @study-abroad/api\" \"npm run dev --workspace @study-abroad/web\"",
+    "dev:api": "npm run dev --workspace @study-abroad/api",
+    "dev:web": "npm run dev --workspace @study-abroad/web",
+    "build": "npm run build --workspace @study-abroad/shared && npm run build --workspace @study-abroad/api && npm run build --workspace @study-abroad/web",
+    "typecheck": "npm run build --workspace @study-abroad/shared && npm run typecheck --workspace @study-abroad/api && npm run typecheck --workspace @study-abroad/web && npm run typecheck --workspace @study-abroad/shared",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
