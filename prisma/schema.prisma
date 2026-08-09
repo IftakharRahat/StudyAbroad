@@ -33,6 +33,12 @@ enum ApplicationRiskTolerance {
   CUSTOM
 }
 
+enum DocumentStatus {
+  PENDING
+  PREPARED
+  SUBMITTED
+}
+
 model User {
   id                   String                     @id @default(cuid())
   name                 String
@@ -44,6 +50,7 @@ model User {
   profile              StudentProfile?
   savedScholarships    StudentSavedScholarship[]
   scholarshipDeadlines ScholarshipDeadline[]
+  documentChecklistItems DocumentChecklistItem[]
 }
 
 model StudentProfile {
@@ -139,8 +146,25 @@ model Program {
   scholarships             Scholarship[]
   universityMatches        UniversityMatch[]
   applicationStrategyItems ApplicationStrategyItem[]
+  documentChecklistItems   DocumentChecklistItem[]
 
   @@unique([universityId, title])
+}
+
+model DocumentChecklistItem {
+  id        String         @id @default(cuid())
+  userId    String
+  programId String
+  title     String
+  category  String
+  status    DocumentStatus @default(PENDING)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program   Program        @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, programId, title])
+  @@index([userId, status])
 }
 
 model Scholarship {

@@ -7,3 +7,5 @@ coverage
 *.log
 .logs
 *.tsbuildinfo
+help.md 
+project.md 
