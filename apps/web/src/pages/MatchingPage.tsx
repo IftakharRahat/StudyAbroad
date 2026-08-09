@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Filter, GraduationCap, RefreshCw, Search, Target, TrendingUp } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ClipboardList, Filter, GraduationCap, RefreshCw, Search, Target, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { apiRequest } from "../api/client";
 import { useAuth } from "../state/AuthContext";
@@ -131,15 +131,24 @@ export function MatchingPage() {
               <p className="mt-2 text-sm text-[#667085]">Programs are grouped by profile fit, requirements, budget, country preference, and readiness score.</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => generateMatches()}
-            disabled={generating}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#6d3df4] px-5 text-sm font-medium text-white hover:bg-[#5f35d8] disabled:opacity-60"
-          >
-            <RefreshCw className={`h-4 w-4 ${generating ? "animate-spin" : ""}`} strokeWidth={1.8} aria-hidden="true" />
-            <span>{generating ? "Generating" : "Generate matches"}</span>
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/application-strategy"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#dfe4ef] bg-white px-5 text-sm font-medium text-[#344054] hover:bg-[#f8f8fb]"
+            >
+              <ClipboardList className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
+              <span>Build application plan</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => generateMatches()}
+              disabled={generating}
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#6d3df4] px-5 text-sm font-medium text-white hover:bg-[#5f35d8] disabled:opacity-60"
+            >
+              <RefreshCw className={`h-4 w-4 ${generating ? "animate-spin" : ""}`} strokeWidth={1.8} aria-hidden="true" />
+              <span>{generating ? "Generating" : "Generate matches"}</span>
+            </button>
+          </div>
         </div>
       </section>
 

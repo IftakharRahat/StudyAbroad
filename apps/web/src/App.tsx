@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/AppLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ApplicationStrategyPage } from "./pages/ApplicationStrategyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CountriesPage } from "./pages/CountriesPage";
 import { DeadlinesPage } from "./pages/DeadlinesPage";
@@ -30,6 +31,7 @@ export function App() {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="readiness" element={<ReadinessPage />} />
         <Route path="matches" element={<MatchingPage />} />
+        <Route path="application-strategy" element={<ApplicationStrategyPage />} />
         <Route path="scholarships" element={<ScholarshipsPage />} />
         <Route path="scholarships/:scholarshipId" element={<ScholarshipDetailsPage />} />
         <Route path="saved" element={<SavedScholarshipsPage />} />

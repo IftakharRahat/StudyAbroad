@@ -26,6 +26,13 @@ enum ScholarshipStatus {
   ARCHIVED
 }
 
+enum ApplicationRiskTolerance {
+  CONSERVATIVE
+  BALANCED
+  AMBITIOUS
+  CUSTOM
+}
+
 model User {
   id                   String                     @id @default(cuid())
   name                 String
@@ -76,6 +83,7 @@ model StudentProfile {
   readinessScores      ReadinessScore[]
   universityMatches    UniversityMatch[]
   scholarshipMatches   ScholarshipMatch[]
+  applicationStrategyPlans ApplicationStrategyPlan[]
 }
 
 model Country {
@@ -130,6 +138,7 @@ model Program {
   university               University         @relation(fields: [universityId], references: [id], onDelete: Cascade)
   scholarships             Scholarship[]
   universityMatches        UniversityMatch[]
+  applicationStrategyItems ApplicationStrategyItem[]
 
   @@unique([universityId, title])
 }
@@ -225,6 +234,7 @@ model UniversityMatch {
   createdAt        DateTime        @default(now())
   studentProfile   StudentProfile  @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
   program          Program         @relation(fields: [programId], references: [id], onDelete: Cascade)
+  applicationStrategyItems ApplicationStrategyItem[]
 }
 
 model ScholarshipMatch {
@@ -240,4 +250,42 @@ model ScholarshipMatch {
   scholarship        Scholarship     @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
 
   @@unique([studentProfileId, scholarshipId])
+}
+
+model ApplicationStrategyPlan {
+  id                String                    @id @default(cuid())
+  studentProfileId  String
+  totalApplications Int
+  safeCount         Int
+  targetCount       Int
+  reachCount        Int
+  riskTolerance     ApplicationRiskTolerance  @default(BALANCED)
+  summary           String
+  warnings          Json
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  studentProfile    StudentProfile            @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+  items             ApplicationStrategyItem[]
+
+  @@index([studentProfileId, createdAt])
+}
+
+model ApplicationStrategyItem {
+  id          String                   @id @default(cuid())
+  planId      String
+  programId   String
+  matchId     String?
+  category    MatchCategory
+  rank        Int
+  score       Int
+  rationale   Json
+  isLocked    Boolean                  @default(false)
+  createdAt   DateTime                 @default(now())
+  plan        ApplicationStrategyPlan  @relation(fields: [planId], references: [id], onDelete: Cascade)
+  program     Program                  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  match       UniversityMatch?         @relation(fields: [matchId], references: [id], onDelete: SetNull)
+
+  @@index([planId, category])
+  @@index([programId])
+  @@index([matchId])
 }

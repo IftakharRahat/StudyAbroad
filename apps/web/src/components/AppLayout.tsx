@@ -4,6 +4,7 @@ import {
   Bot,
   CalendarDays,
   ChevronDown,
+  ClipboardList,
   FileText,
   Gauge,
   Globe2,
@@ -31,6 +32,11 @@ const navItems = [
     label: "University Search",
     to: "/matches",
     icon: Search
+  },
+  {
+    label: "Strategy Builder",
+    to: "/application-strategy",
+    icon: ClipboardList
   },
   {
     label: "Scholarships",

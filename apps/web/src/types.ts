@@ -178,6 +178,41 @@ export type UniversityMatchesResponse = {
   universityMatches: UniversityMatch[];
 };
 
+export type ApplicationRiskTolerance = "CONSERVATIVE" | "BALANCED" | "AMBITIOUS" | "CUSTOM";
+
+export type ApplicationStrategyItem = {
+  id: string;
+  planId: string;
+  programId: string;
+  matchId?: string | null;
+  category: "SAFE" | "TARGET" | "REACH";
+  rank: number;
+  score: number;
+  rationale: string[];
+  isLocked: boolean;
+  createdAt: string;
+  program: Program;
+};
+
+export type ApplicationStrategyPlan = {
+  id: string;
+  studentProfileId: string;
+  totalApplications: number;
+  safeCount: number;
+  targetCount: number;
+  reachCount: number;
+  riskTolerance: ApplicationRiskTolerance;
+  summary: string;
+  warnings: string[];
+  createdAt: string;
+  updatedAt: string;
+  items: ApplicationStrategyItem[];
+};
+
+export type ApplicationStrategyResponse = {
+  applicationStrategyPlan: ApplicationStrategyPlan | null;
+};
+
 export type Scholarship = {
   id: string;
   name: string;

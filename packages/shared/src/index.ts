@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const roleSchema = z.enum(["STUDENT", "CONTENT_MANAGER", "ADMIN"]);
+export const applicationRiskToleranceSchema = z.enum(["CONSERVATIVE", "BALANCED", "AMBITIOUS", "CUSTOM"]);
 
 export const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -63,6 +64,39 @@ export type Role = z.infer<typeof roleSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type StudentProfileInput = z.infer<typeof studentProfileSchema>;
+export const applicationStrategyGenerateSchema = z.object({
+  totalApplications: z.coerce.number().int().min(3).max(15).default(9),
+  safeCount: z.coerce.number().int().min(0).max(15).optional(),
+  targetCount: z.coerce.number().int().min(0).max(15).optional(),
+  reachCount: z.coerce.number().int().min(0).max(15).optional(),
+  riskTolerance: applicationRiskToleranceSchema.default("BALANCED")
+}).refine((data) => {
+  const counts = [data.safeCount, data.targetCount, data.reachCount];
+  const providedCount = counts.filter((value) => value !== undefined).length;
+
+  if (providedCount === 0) {
+    return true;
+  }
+
+  const totalCount = Number(data.safeCount) + Number(data.targetCount) + Number(data.reachCount);
+
+  return providedCount === 3 && totalCount >= 3 && totalCount <= 15;
+}, {
+  message: "Provide all category counts or none, with three to fifteen total applications",
+  path: ["totalApplications"]
+});
+
+export const applicationStrategyItemUpdateSchema = z.object({
+  items: z.array(z.object({
+    id: z.string().min(1),
+    rank: z.coerce.number().int().min(1).max(15).optional(),
+    isLocked: z.boolean().optional()
+  })).min(1, "At least one strategy item is required")
+});
+
+export type ApplicationRiskTolerance = z.infer<typeof applicationRiskToleranceSchema>;
+export type ApplicationStrategyGenerateInput = z.infer<typeof applicationStrategyGenerateSchema>;
+export type ApplicationStrategyItemUpdateInput = z.infer<typeof applicationStrategyItemUpdateSchema>;
 
 export type AuthUser = {
   id: string;
