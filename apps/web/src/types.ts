@@ -296,6 +296,51 @@ export type ScholarshipDeadline = {
   scholarship: Scholarship;
 };
 
+export type MonitorAlertType = "APPLICATION_DEADLINE" | "SCHOLARSHIP_DEADLINE" | "REQUIREMENT_CHANGE";
+export type MonitorAlertSeverity = "INFO" | "WARNING" | "CRITICAL";
+export type MonitorAlertStatus = "UNREAD" | "READ" | "DISMISSED";
+export type MonitoredRequirementType = "PROGRAM" | "SCHOLARSHIP";
+
+export type MonitorAlert = {
+  id: string;
+  userId: string;
+  type: MonitorAlertType;
+  severity: MonitorAlertSeverity;
+  status: MonitorAlertStatus;
+  entityType: MonitoredRequirementType;
+  programId?: string | null;
+  scholarshipId?: string | null;
+  title: string;
+  message: string;
+  dueDate?: string | null;
+  field?: string | null;
+  previousValue?: string | null;
+  currentValue?: string | null;
+  dedupeKey: string;
+  metadata?: Record<string, unknown> | null;
+  createdAt: string;
+  updatedAt: string;
+  program?: Program | null;
+  scholarship?: Scholarship | null;
+};
+
+export type MonitorAlertsResponse = {
+  alerts: MonitorAlert[];
+  unreadCount: number;
+  criticalCount: number;
+};
+
+export type MonitorScanResponse = MonitorAlertsResponse & {
+  summary: {
+    watchedPrograms: number;
+    watchedScholarships: number;
+    alertsCreated: number;
+    requirementChanges: number;
+    unreadAlerts: number;
+    criticalAlerts: number;
+  };
+};
+
 export type ScholarshipDetailResponse = {
   scholarship: Scholarship;
   match: (Omit<ScholarshipMatch, "scholarship"> & {

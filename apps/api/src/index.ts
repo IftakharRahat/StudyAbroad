@@ -9,6 +9,7 @@ import { catalogRouter } from "./routes/catalog.routes.js";
 import { countryRouter } from "./routes/country.routes.js";
 import { documentChecklistRouter } from "./routes/document-checklist.routes.js";
 import { matchRouter } from "./routes/match.routes.js";
+import { monitorRouter } from "./routes/monitor.routes.js";
 import { profileRouter } from "./routes/profile.routes.js";
 import { programRouter } from "./routes/program.routes.js";
 import { readinessRouter } from "./routes/readiness.routes.js";
@@ -57,6 +58,7 @@ app.use("/api/countries", countryRouter);
 app.use("/api/documents", documentChecklistRouter);
 app.use("/api/readiness", readinessRouter);
 app.use("/api/matches", matchRouter);
+app.use("/api/monitor", monitorRouter);
 app.use("/api/programs", programRouter);
 app.use("/api/scholarships", scholarshipRouter);
 

@@ -104,6 +104,21 @@ export type ApplicationStrategyGenerateInput = z.infer<typeof applicationStrateg
 export type ApplicationStrategyItemUpdateInput = z.infer<typeof applicationStrategyItemUpdateSchema>;
 export type DocumentStatus = z.infer<typeof documentStatusSchema>;
 
+export const monitorScanSchema = z.object({
+  horizonDays: z.coerce.number().int().min(1).max(365).default(180),
+  criticalDays: z.coerce.number().int().min(0).max(90).default(30)
+}).refine((data) => data.criticalDays <= data.horizonDays, {
+  message: "Critical window cannot be larger than the monitor horizon",
+  path: ["criticalDays"]
+});
+
+export const monitorAlertStatusSchema = z.object({
+  status: z.enum(["UNREAD", "READ", "DISMISSED"])
+});
+
+export type MonitorScanInput = z.infer<typeof monitorScanSchema>;
+export type MonitorAlertStatusInput = z.infer<typeof monitorAlertStatusSchema>;
+
 export type AuthUser = {
   id: string;
   name: string;

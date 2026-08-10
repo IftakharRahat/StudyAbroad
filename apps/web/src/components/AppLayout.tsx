@@ -59,7 +59,7 @@ const navItems = [
     icon: FileText
   },
   {
-    label: "Deadlines",
+    label: "Deadline Monitor",
     to: "/deadlines",
     icon: CalendarDays
   },

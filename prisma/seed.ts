@@ -571,6 +571,8 @@ function defaultScholarshipDocuments() {
 }
 
 async function resetCatalog() {
+  await prisma.monitorAlert.deleteMany();
+  await prisma.requirementSnapshot.deleteMany();
   await prisma.applicationStrategyItem.deleteMany();
   await prisma.applicationStrategyPlan.deleteMany();
   await prisma.scholarshipDeadline.deleteMany();
