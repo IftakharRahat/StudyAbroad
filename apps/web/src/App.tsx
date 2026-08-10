@@ -5,6 +5,7 @@ import { ApplicationStrategyPage } from "./pages/ApplicationStrategyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CountriesPage } from "./pages/CountriesPage";
 import { DeadlinesPage } from "./pages/DeadlinesPage";
+import { DocumentsPage } from "./pages/DocumentsPage";
 import { LoginPage } from "./pages/LoginPage";
 import { MatchingPage } from "./pages/MatchingPage";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -36,6 +37,7 @@ export function App() {
         <Route path="scholarships/:scholarshipId" element={<ScholarshipDetailsPage />} />
         <Route path="saved" element={<SavedScholarshipsPage />} />
         <Route path="deadlines" element={<DeadlinesPage />} />
+        <Route path="documents" element={<DocumentsPage />} />
         <Route path="countries" element={<CountriesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

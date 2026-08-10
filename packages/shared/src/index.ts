@@ -94,9 +94,15 @@ export const applicationStrategyItemUpdateSchema = z.object({
   })).min(1, "At least one strategy item is required")
 });
 
+export const documentStatusSchema = z.enum(["PENDING", "PREPARED", "SUBMITTED"]);
+export const documentChecklistItemUpdateSchema = z.object({
+  status: documentStatusSchema
+});
+
 export type ApplicationRiskTolerance = z.infer<typeof applicationRiskToleranceSchema>;
 export type ApplicationStrategyGenerateInput = z.infer<typeof applicationStrategyGenerateSchema>;
 export type ApplicationStrategyItemUpdateInput = z.infer<typeof applicationStrategyItemUpdateSchema>;
+export type DocumentStatus = z.infer<typeof documentStatusSchema>;
 
 export type AuthUser = {
   id: string;

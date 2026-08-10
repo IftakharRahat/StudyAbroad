@@ -213,6 +213,18 @@ export type ApplicationStrategyResponse = {
   applicationStrategyPlan: ApplicationStrategyPlan | null;
 };
 
+export type DocumentStatus = "PENDING" | "PREPARED" | "SUBMITTED";
+
+export type DocumentChecklistItem = {
+  id: string;
+  programId: string;
+  title: string;
+  category: string;
+  status: DocumentStatus;
+  updatedAt: string;
+  program: Program;
+};
+
 export type Scholarship = {
   id: string;
   name: string;

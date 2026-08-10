@@ -55,7 +55,7 @@ const navItems = [
   },
   {
     label: "Documents",
-    to: "/profile",
+    to: "/documents",
     icon: FileText
   },
   {
