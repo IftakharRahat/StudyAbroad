@@ -125,3 +125,127 @@ export type AuthUser = {
   email: string;
   role: Role;
 };
+
+export const advisorMessageRoleSchema = z.enum(["user", "assistant", "system"]);
+
+export const advisorMessageSchema = z.object({
+  role: advisorMessageRoleSchema,
+  content: z.string().min(1, "Message content cannot be empty"),
+  timestamp: z.string().optional()
+});
+
+export const advisorChatSchema = z.object({
+  question: z.string().min(1, "Question cannot be empty"),
+  history: z.array(advisorMessageSchema).optional().default([]),
+  focusMode: z.enum(["GENERAL", "UNIVERSITY", "COUNTRY", "INSIGHTS", "NEXT_STEPS"]).optional().default("GENERAL"),
+  entityId: z.string().optional()
+});
+
+export const advisorExplainUniversitySchema = z.object({
+  programId: z.string().min(1, "Program ID is required"),
+  question: z.string().optional()
+});
+
+export const advisorCompareCountriesSchema = z.object({
+  countryIds: z.array(z.string().min(1)).min(2, "Select at least 2 countries to compare").max(5, "You can compare up to 5 countries"),
+  question: z.string().optional()
+});
+
+export const advisorInsightsSchema = z.object({
+  countryId: z.string().optional(),
+  field: z.string().optional(),
+  question: z.string().optional()
+});
+
+export const advisorNextStepsSchema = z.object({
+  targetIntake: z.string().optional(),
+  question: z.string().optional()
+});
+
+export type AdvisorMessageRole = z.infer<typeof advisorMessageRoleSchema>;
+export type AdvisorMessage = z.infer<typeof advisorMessageSchema>;
+export type AdvisorChatInput = z.infer<typeof advisorChatSchema>;
+export type AdvisorExplainUniversityInput = z.infer<typeof advisorExplainUniversitySchema>;
+export type AdvisorCompareCountriesInput = z.infer<typeof advisorCompareCountriesSchema>;
+export type AdvisorInsightsInput = z.infer<typeof advisorInsightsSchema>;
+export type AdvisorNextStepsInput = z.infer<typeof advisorNextStepsSchema>;
+
+export type AdvisorReferencedEntity = {
+  type: "PROGRAM" | "UNIVERSITY" | "COUNTRY" | "SCHOLARSHIP";
+  id: string;
+  name: string;
+  badge?: string;
+  subtext?: string;
+  link?: string;
+};
+
+export type AdvisorNextStepItem = {
+  id: string;
+  category: "ACADEMICS_TESTS" | "APPLICATION_STRATEGY" | "SCHOLARSHIPS_FINANCE" | "DOCUMENTS_VISA";
+  title: string;
+  description: string;
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  status: "PENDING" | "IN_PROGRESS" | "DONE";
+  actionUrl?: string;
+  actionLabel?: string;
+};
+
+export type AdvisorResponse = {
+  answer: string;
+  mode: "GENERAL" | "UNIVERSITY" | "COUNTRY" | "INSIGHTS" | "NEXT_STEPS";
+  keyTakeaways: string[];
+  suggestedFollowUps: string[];
+  referencedEntities: AdvisorReferencedEntity[];
+  nextSteps?: AdvisorNextStepItem[];
+  suitabilityScore?: {
+    overallFit: number;
+    category: "SAFE" | "TARGET" | "REACH";
+    academicFit: string;
+    budgetFit: string;
+    englishFit: string;
+  };
+  countryComparisonTable?: Array<{
+    country: string;
+    annualCostUsd: number;
+    postStudyWorkMonths: number;
+    partTimeHours: number;
+    visaDifficulty: string;
+    jobMarket: string;
+    safetyScore: number;
+    budgetFit: string;
+  }>;
+  disclaimer: string;
+};
+
+export type AdvisorContextResponse = {
+  profileSummary: {
+    name: string;
+    nationality: string;
+    targetDegree: string;
+    fieldOfStudy: string;
+    cgpaNormalized: number;
+    englishScore: string;
+    budgetUsd: number;
+    preferredCountries: string[];
+    readinessTier?: string;
+    readinessScore?: number;
+  };
+  samplePrompts: Array<{
+    id: string;
+    title: string;
+    prompt: string;
+    category: "UNIVERSITY" | "COUNTRY" | "INSIGHTS" | "NEXT_STEPS" | "GENERAL";
+  }>;
+  availablePrograms: Array<{
+    id: string;
+    title: string;
+    universityName: string;
+    countryName: string;
+    category?: "SAFE" | "TARGET" | "REACH";
+  }>;
+  availableCountries: Array<{
+    id: string;
+    name: string;
+  }>;
+};
+

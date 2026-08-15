@@ -65,7 +65,7 @@ const navItems = [
   },
   {
     label: "AI Advisor",
-    to: "/readiness",
+    to: "/advisor",
     icon: Bot
   },
   {

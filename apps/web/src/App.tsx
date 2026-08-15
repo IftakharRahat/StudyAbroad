@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/AppLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AiAdvisorPage } from "./pages/AiAdvisorPage";
 import { ApplicationStrategyPage } from "./pages/ApplicationStrategyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CountriesPage } from "./pages/CountriesPage";
@@ -39,6 +40,8 @@ export function App() {
         <Route path="deadlines" element={<DeadlinesPage />} />
         <Route path="documents" element={<DocumentsPage />} />
         <Route path="countries" element={<CountriesPage />} />
+        <Route path="advisor" element={<AiAdvisorPage />} />
+        <Route path="ai-advisor" element={<Navigate to="/advisor" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

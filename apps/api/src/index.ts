@@ -4,6 +4,7 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { authRouter } from "./routes/auth.routes.js";
+import { aiAdvisorRouter } from "./routes/ai-advisor.routes.js";
 import { applicationStrategyRouter } from "./routes/application-strategy.routes.js";
 import { catalogRouter } from "./routes/catalog.routes.js";
 import { countryRouter } from "./routes/country.routes.js";
@@ -51,6 +52,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/advisor", aiAdvisorRouter);
 app.use("/api/application-strategy", applicationStrategyRouter);
 app.use("/api/student/profile", profileRouter);
 app.use("/api/catalog", catalogRouter);

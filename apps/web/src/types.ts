@@ -347,3 +347,18 @@ export type ScholarshipDetailResponse = {
     scholarship?: Scholarship;
   }) | null;
 };
+
+export type {
+  AdvisorChatInput,
+  AdvisorCompareCountriesInput,
+  AdvisorContextResponse,
+  AdvisorExplainUniversityInput,
+  AdvisorInsightsInput,
+  AdvisorMessage,
+  AdvisorMessageRole,
+  AdvisorNextStepItem,
+  AdvisorNextStepsInput,
+  AdvisorReferencedEntity,
+  AdvisorResponse
+} from "@study-abroad/shared";
+

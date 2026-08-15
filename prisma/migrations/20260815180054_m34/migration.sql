@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "RequirementSnapshot_studentProfileId_entityType_scholarshipId_k" RENAME TO "RequirementSnapshot_studentProfileId_entityType_scholarship_key";
