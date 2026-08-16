@@ -249,3 +249,24 @@ export type AdvisorContextResponse = {
   }>;
 };
 
+export type OpportunityFeedItemType = "SCHOLARSHIP" | "DEADLINE" | "UNIVERSITY" | "VISA_INSIGHT" | "REQUIREMENT_CHANGE";
+
+export type OpportunityFeedItem = {
+  id: string;
+  type: OpportunityFeedItemType;
+  title: string;
+  description: string;
+  severity: "INFO" | "WARNING" | "CRITICAL";
+  createdAt: string;
+  actionUrl: string;
+  actionLabel: string;
+  meta?: Record<string, any>;
+};
+
+export type OpportunityFeedResponse = {
+  feedItems: OpportunityFeedItem[];
+  profileComplete: boolean;
+  missingFields: string[];
+};
+
+

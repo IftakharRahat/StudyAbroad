@@ -1,5 +1,6 @@
 import { BarChart3, Bot, GraduationCap, Landmark, ShieldCheck, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { OpportunityFeed } from "../components/OpportunityFeed";
 
 const phaseCards = [
   {
@@ -74,6 +75,8 @@ export function DashboardPage() {
           );
         })}
       </section>
+
+      <OpportunityFeed />
     </div>
   );
 }
