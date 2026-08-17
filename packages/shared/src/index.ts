@@ -269,4 +269,83 @@ export type OpportunityFeedResponse = {
   missingFields: string[];
 };
 
+// ---------------------------------------------------------------------------
+// Module 2 · Feature 3 — Application Progress Tracker
+// ---------------------------------------------------------------------------
+export const applicationStageSchema = z.enum([
+  "PLANNED",
+  "PREPARING",
+  "APPLIED",
+  "INTERVIEW",
+  "OFFER_RECEIVED",
+  "REJECTED",
+  "VISA_PROCESSING",
+  "ENROLLED"
+]);
+
+export const applicationProgressCreateSchema = z.object({
+  programId: z.string().min(1, "programId is required"),
+  stage: applicationStageSchema.optional().default("PLANNED"),
+  notes: z.string().max(1000).optional().nullable()
+});
+
+export const applicationProgressUpdateSchema = z.object({
+  stage: applicationStageSchema.optional(),
+  notes: z.string().max(1000).optional().nullable()
+}).refine((data) => data.stage !== undefined || data.notes !== undefined, {
+  message: "Provide a stage and/or notes to update"
+});
+
+export type ApplicationStage = z.infer<typeof applicationStageSchema>;
+export type ApplicationProgressCreateInput = z.infer<typeof applicationProgressCreateSchema>;
+export type ApplicationProgressUpdateInput = z.infer<typeof applicationProgressUpdateSchema>;
+
+// ---------------------------------------------------------------------------
+// Module 3 · Feature 2 — University Reality Check
+// ---------------------------------------------------------------------------
+export const realityCheckCategorySchema = z.enum([
+  "HOUSING",
+  "HIDDEN_COSTS",
+  "PART_TIME_JOBS",
+  "LANGUAGE_BARRIER",
+  "STUDENT_SATISFACTION",
+  "ACCOMMODATION",
+  "SAFETY",
+  "TRANSPORT"
+]);
+
+export const realityCheckCreateSchema = z.object({
+  universityId: z.string().min(1, "universityId is required"),
+  category: realityCheckCategorySchema,
+  headline: z.string().min(3).max(160),
+  detail: z.string().min(10).max(2000),
+  severity: z.coerce.number().int().min(1).max(5).default(3),
+  monthlyCostUsd: z.coerce.number().min(0).optional().nullable(),
+  sourceLabel: z.string().max(160).optional().nullable(),
+  sourceUrl: z.string().url().optional().nullable(),
+  isPublished: z.boolean().optional().default(false)
+});
+
+export type RealityCheckCategory = z.infer<typeof realityCheckCategorySchema>;
+export type RealityCheckCreateInput = z.infer<typeof realityCheckCreateSchema>;
+
+// ---------------------------------------------------------------------------
+// Module 4 · Feature 2 — Funding Gap Analyzer
+// ---------------------------------------------------------------------------
+export const fundingGapStatusSchema = z.enum(["SURPLUS", "BALANCED", "MINOR_GAP", "MAJOR_GAP"]);
+
+export const fundingGapAnalyzeSchema = z.object({
+  availableBudgetUsd: z.coerce.number().min(0).optional(),
+  scholarshipUsd: z.coerce.number().min(0).default(0),
+  programIds: z.array(z.string().min(1)).max(15).optional(),
+  visaFeeUsd: z.coerce.number().min(0).optional(),
+  insuranceUsd: z.coerce.number().min(0).optional(),
+  applicationFeeUsd: z.coerce.number().min(0).optional(),
+  flightCostUsd: z.coerce.number().min(0).optional(),
+  emergencyFundUsd: z.coerce.number().min(0).optional()
+});
+
+export type FundingGapStatus = z.infer<typeof fundingGapStatusSchema>;
+export type FundingGapAnalyzeInput = z.infer<typeof fundingGapAnalyzeSchema>;
+
 
