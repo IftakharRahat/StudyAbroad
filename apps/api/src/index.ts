@@ -16,6 +16,9 @@ import { programRouter } from "./routes/program.routes.js";
 import { readinessRouter } from "./routes/readiness.routes.js";
 import { scholarshipRouter } from "./routes/scholarship.routes.js";
 import { opportunityFeedRouter } from "./routes/opportunity-feed.routes.js";
+import { applicationProgressRouter } from "./routes/application-progress.routes.js";
+import { universityRealityCheckRouter } from "./routes/university-reality-check.routes.js";
+import { fundingGapRouter } from "./routes/funding-gap.routes.js";
 import { requireAuth, requireRole } from "./middleware/auth.js";
 import { prisma } from "./lib/prisma.js";
 import { getApprovedScholarshipSummariesCatalog, getCountriesCatalog } from "./services/catalog.service.js";
@@ -65,6 +68,9 @@ app.use("/api/monitor", monitorRouter);
 app.use("/api/programs", programRouter);
 app.use("/api/scholarships", scholarshipRouter);
 app.use("/api/opportunity-feed", opportunityFeedRouter);
+app.use("/api/application-progress", applicationProgressRouter);
+app.use("/api/reality-check", universityRealityCheckRouter);
+app.use("/api/funding-gap", fundingGapRouter);
 
 app.get("/api/admin/health", requireAuth, requireRole(["ADMIN", "CONTENT_MANAGER"]), (_req, res) => {
   res.json({

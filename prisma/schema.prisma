@@ -62,6 +62,35 @@ enum MonitoredRequirementType {
   SCHOLARSHIP
 }
 
+enum ApplicationStage {
+  PLANNED
+  PREPARING
+  APPLIED
+  INTERVIEW
+  OFFER_RECEIVED
+  REJECTED
+  VISA_PROCESSING
+  ENROLLED
+}
+
+enum RealityCheckCategory {
+  HOUSING
+  HIDDEN_COSTS
+  PART_TIME_JOBS
+  LANGUAGE_BARRIER
+  STUDENT_SATISFACTION
+  ACCOMMODATION
+  SAFETY
+  TRANSPORT
+}
+
+enum FundingGapStatus {
+  SURPLUS
+  BALANCED
+  MINOR_GAP
+  MAJOR_GAP
+}
+
 model User {
   id                   String                     @id @default(cuid())
   name                 String
@@ -75,6 +104,8 @@ model User {
   scholarshipDeadlines ScholarshipDeadline[]
   documentChecklistItems DocumentChecklistItem[]
   monitorAlerts        MonitorAlert[]
+  applicationProgress  ApplicationProgress[]
+  fundingGapAnalyses   FundingGapAnalysis[]
 }
 
 model StudentProfile {
@@ -147,6 +178,7 @@ model University {
   country               Country       @relation(fields: [countryId], references: [id], onDelete: Cascade)
   programs              Program[]
   scholarships          Scholarship[]
+  realityChecks         UniversityRealityCheck[]
 
   @@unique([name, countryId])
 }
@@ -174,6 +206,8 @@ model Program {
   documentChecklistItems   DocumentChecklistItem[]
   monitorAlerts            MonitorAlert[]
   requirementSnapshots     RequirementSnapshot[]
+  applicationProgress      ApplicationProgress[]
+  fundingGapItems          FundingGapItem[]
 
   @@unique([universityId, title])
 }
@@ -389,4 +423,92 @@ model RequirementSnapshot {
   @@unique([studentProfileId, entityType, programId])
   @@unique([studentProfileId, entityType, scholarshipId])
   @@index([studentProfileId, entityType])
+}
+
+// ---------------------------------------------------------------------------
+// Module 2 · Feature 3 — Application Progress Tracker
+// Tracks each university application from planning to enrollment.
+// ---------------------------------------------------------------------------
+model ApplicationProgress {
+  id            String            @id @default(cuid())
+  userId        String
+  programId     String
+  stage         ApplicationStage  @default(PLANNED)
+  notes         String?
+  appliedAt     DateTime?
+  decisionAt    DateTime?
+  events        Json              @default("[]")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program       Program           @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, programId])
+  @@index([userId, stage])
+}
+
+// ---------------------------------------------------------------------------
+// Module 3 · Feature 2 — University Reality Check
+// Practical, on-the-ground insights official pages rarely highlight.
+// Curated/verified by Content Managers, read by Students.
+// ---------------------------------------------------------------------------
+model UniversityRealityCheck {
+  id            String                @id @default(cuid())
+  universityId  String
+  category      RealityCheckCategory
+  headline      String
+  detail        String
+  severity      Int                   @default(3) // 1 (great) .. 5 (severe issue)
+  monthlyCostUsd Float?
+  sourceLabel   String?
+  sourceUrl     String?
+  isPublished   Boolean               @default(false)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  university    University            @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId, category])
+  @@index([isPublished])
+}
+
+// ---------------------------------------------------------------------------
+// Module 4 · Feature 2 — Funding Gap Analyzer
+// Compares a student's available budget against estimated total cost and
+// suggests ways to close any gap.
+// ---------------------------------------------------------------------------
+model FundingGapAnalysis {
+  id                 String            @id @default(cuid())
+  userId             String
+  availableBudgetUsd Float
+  scholarshipUsd     Float             @default(0)
+  estimatedCostUsd   Float
+  gapUsd             Float
+  status             FundingGapStatus
+  suggestions        Json              @default("[]")
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items              FundingGapItem[]
+
+  @@index([userId, createdAt])
+}
+
+model FundingGapItem {
+  id                 String              @id @default(cuid())
+  analysisId         String
+  programId          String
+  label              String
+  tuitionUsd         Float
+  livingCostUsd      Float
+  visaFeeUsd         Float               @default(0)
+  insuranceUsd       Float               @default(0)
+  applicationFeeUsd  Float               @default(0)
+  flightCostUsd      Float               @default(0)
+  emergencyFundUsd   Float               @default(0)
+  totalCostUsd       Float
+  analysis           FundingGapAnalysis  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  program            Program             @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@index([programId])
 }
